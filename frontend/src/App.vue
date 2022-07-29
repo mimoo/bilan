@@ -1,7 +1,6 @@
 <script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import HelloWorld from './components/HelloWorld.vue'
+import Habits from './components/Habits.vue'
+import Moto from './components/Moto.vue'
 
 </script>
 
@@ -51,8 +50,9 @@ import HelloWorld from './components/HelloWorld.vue'
   </header>
 
   <!-- active modules (limited to 4?) -->
-  <div class="flex m-10">
-    <HelloWorld />
+  <div class="flex m-10 gap-4">
+    <Habits />
+    <Moto />
   </div>
 
 </template>
