@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Habits from './components/Habits.vue'
 import Moto from './components/Moto.vue'
+import Memory from './components/Memory.vue'
 
 </script>
 
@@ -50,9 +51,10 @@ import Moto from './components/Moto.vue'
   </header>
 
   <!-- active modules (limited to 4?) -->
-  <div class="flex m-10 gap-4">
+  <div class="flex flex-wrap items-start m-10 gap-4">
     <Habits />
     <Moto />
+    <Memory />
   </div>
 
 </template>

@@ -83,7 +83,6 @@ if (date_json == null) {
 
   // change phase if we're done
   if (end_date.value.isBefore(moment())) {
-    console.log("hello");
     phase.value = Phase.DoneOrNot;
   }
 }
@@ -268,7 +267,7 @@ function restart() {
 </script>
 
 <template>
-  <div class="basis-1/3 shadow-md rounded-3xl px-8 pt-6 pb-8 mb-4" style="background-color: #ffffff">
+  <div class="w-96 shadow-md rounded-3xl px-8 pt-6 pb-8 mb-4" style="background-color: #ffffff">
     <h1 class="text-xl text-center font-bold my-2">habit tuning (<small><span v-if="countdown[0]">ended</span><span v-else>ending</span> {{ countdown[1] }}</small>)</h1>
 
     <!-- end of the week -->
@@ -387,13 +386,10 @@ function restart() {
       <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="habit" type="text" placeholder="add a new habit">
     </div>
 
-    <div class="flex items-center justify-between">
-      <button type="button" class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2" v-on:click="addHabit(Trend.More)">I want to do more</button>
+    <button type="button" class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2" v-on:click="addHabit(Trend.More)">I want to do more</button>
 
     <button type="button" class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2" v-on:click="addHabit(Trend.Less)">I want to do less</button>
 
-
-    </div>
   </form>
   </div>
 
