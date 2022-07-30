@@ -3,7 +3,17 @@
 
 # Bilan
 
-Just check the webpage.
+<img width="1283" alt="Screen Shot 2022-07-30 at 1 18 26 AM" src="https://user-images.githubusercontent.com/1316043/181859670-e1515085-b169-4660-b9f7-56edf0f3ebde.png">
+
+I use this for myself to:
+
+* try to change my habits
+* remember my "principle" or "moto" of the moment
+* force myself to exercise my memory, as well as gratefulness
+
+You can use it too here: https://mimoo.github.io/bilan/
+
+It uses your browser's local storage, so nothing is stored on my own servers.
 
 ## Contributing
 
