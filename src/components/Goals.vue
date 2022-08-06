@@ -269,7 +269,7 @@ function restart() {
         <span class="sr-only">Info</span>
         <div>
           <strong>Enter the goals</strong> you want to tune (do more or less of) for the <strong>next week</strong>.<br>
-          (You can continue modifying this list until the week ends.)
+          (You can continue modifying this list until the week ends.) Tip: try to set a goal in terms of numbers of pomodoro.
         </div>
       </div>
 
