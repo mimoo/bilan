@@ -2,6 +2,7 @@
 import Habits from './components/Habits.vue'
 import Moto from './components/Moto.vue'
 import Memory from './components/Memory.vue'
+import Pomodoro from './components/Pomodoro.vue'
 
 </script>
 
@@ -55,6 +56,7 @@ import Memory from './components/Memory.vue'
     <Habits />
     <Moto />
     <Memory />
+    <Pomodoro />
   </div>
 
 </template>
