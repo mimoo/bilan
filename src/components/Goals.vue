@@ -7,9 +7,9 @@ import { Ref, ref, reactive, computed } from 'vue';
 // constants
 //
 
-const GOALS_STORAGE_KEY = "goals_v1";
-const PREV_GOALS_STORAGE_KEY = "prev_goals_v1";
-const GOALS_DATE_STORAGE_KEY = "goals_dates_v1";
+const GOALS_STORAGE_KEY = "goals_v2";
+const PREV_GOALS_STORAGE_KEY = "prev_goals_v2";
+const GOALS_DATE_STORAGE_KEY = "goals_dates_v2";
 
 //
 // data structures
@@ -33,7 +33,7 @@ let end_date = ref(moment(start_date.value).add(1, 'week'));
 
 const phase = ref(Phase.DuringTheWeek);
 
-const goals = ref<string[]>([])
+const goals = ref<[string, boolean][]>([])
 
 //
 // computed
@@ -113,7 +113,7 @@ function addGoalInner(goal: string) {
   console.assert(phase.value == Phase.DuringTheWeek);
 
   // create the goal
-  goals.value.push(goal);
+  goals.value.push([goal, false]);
 
   // save to localstorage
   window.localStorage.setItem(GOALS_STORAGE_KEY, JSON.stringify(goals.value));
@@ -127,6 +127,20 @@ function deleteGoal(idx: number) {
 
   // save to storage
   window.localStorage.setItem(GOALS_STORAGE_KEY, JSON.stringify(goals.value));
+}
+
+function updateGoal() {
+    console.assert(phase.value == Phase.DuringTheWeek);
+
+    const goals_el = document.querySelectorAll('#goals_list li')!;
+
+    goals_el.forEach((el, idx) => {
+        const check = el.querySelector<HTMLInputElement>("input[type='checkbox']")!.checked;
+        console.log(idx, check);
+        goals.value[idx][1] = check;
+    });
+
+    window.localStorage.setItem(GOALS_STORAGE_KEY, JSON.stringify(goals.value));
 }
 
 function endEarly() {
@@ -158,7 +172,7 @@ function saveBilan() {
 
   let previous: [string, boolean, string][] = [];
   goals_list.forEach((item, index) => {
-    let goal = goals.value[index];
+    let goal = goals.value[index][0];
     let done = item.querySelector("input")!.checked;
     let notes = document.querySelector<HTMLInputElement>("#notes-goal-" + index)!.value;
     previous.push([goal, done, notes]);
@@ -239,9 +253,9 @@ function restart() {
       </div>
 
       <ul id="goals_list_res" class="my-5">
-        <li v-for="(goal, idx) in goals">
+        <li v-for="([goal, done], idx) in goals">
           <label :for="'toggle-goal-' + idx" class="inline-flex relative items-center mb-4 cursor-pointer">
-          <input type="checkbox" value="" :id="'toggle-goal-' + idx" class="sr-only peer">
+          <input type="checkbox" :checked="done" value="" :id="'toggle-goal-' + idx" class="sr-only peer">
           <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
 
           <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
@@ -261,7 +275,7 @@ function restart() {
       <button type="button" class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2" @click="saveBilan">Save week reflection</button>
     </div>
 
-<!-- during the week -->
+    <!-- during the week -->
     <div v-if="phase == Phase.DuringTheWeek">
 
       <div class="flex p-4 text-sm text-gray-700 bg-gray-100 rounded-lg dark:bg-gray-700 dark:text-gray-300" role="alert">
@@ -273,16 +287,18 @@ function restart() {
         </div>
       </div>
 
-
         <ul id="goals_list" class="my-5">
-          <li v-for="(goal, idx) in goals" class="group">
-            
-            {{ goal }}  
-            
-              <button @click="deleteGoal(idx)" class="hidden group-hover:inline-block">
+          <li v-for="([goal, done], idx) in goals" class="group">
+
+            <div class="flex items-center mb-4">
+                <input @click="updateGoal" :checked="done" :id="'goal-checkbox-' + idx" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" >
+                <label :for="'goal-checkbox-'+idx" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"> {{ goal }} </label>
+
+                 <button @click="deleteGoal(idx)" class="hidden group-hover:inline-block">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M6.707 4.879A3 3 0 018.828 4H15a3 3 0 013 3v6a3 3 0 01-3 3H8.828a3 3 0 01-2.12-.879l-4.415-4.414a1 1 0 010-1.414l4.414-4.414zm4 2.414a1 1 0 00-1.414 1.414L10.586 10l-1.293 1.293a1 1 0 101.414 1.414L12 11.414l1.293 1.293a1 1 0 001.414-1.414L13.414 10l1.293-1.293a1 1 0 00-1.414-1.414L12 8.586l-1.293-1.293z" clip-rule="evenodd" />
               </svg></button>
+            </div>             
           </li>
         </ul>
 
@@ -296,9 +312,8 @@ function restart() {
   </form>
   </div>
 
-  <!-- debug 
   <hr class="m-5">
-  <button type="button" class="mr-5 py-2 px-3 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" @click="createHabits">create goals</button>
+  <button type="button" class="mr-5 py-2 px-3 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" @click="createGoals">create goals</button>
 
   <button type="button" class="mr-5 py-2 px-3 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" @click="endEarly">end early</button>
 
@@ -307,7 +322,6 @@ function restart() {
     <button type="button" class="mr-5 py-2 px-3 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" @click="restart">restart</button>
 
   <button type="button" class="mr-5 py-2 px-3 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" @click="">configure</button>
-  -->
 
   </div>
 </template>
