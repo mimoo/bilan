@@ -12,7 +12,7 @@ const MOTO_STORAGE_KEY = "moto_v1";
 // init
 //
 
-let moto = ref("");
+let moto = ref("click to edit");
 
 //
 // load moto from storage
