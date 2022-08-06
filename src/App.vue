@@ -2,6 +2,7 @@
 import Habits from './components/Habits.vue'
 import Moto from './components/Moto.vue'
 import Memory from './components/Memory.vue'
+import Goals from './components/Goals.vue'
 import Pomodoro from './components/Pomodoro.vue'
 
 </script>
@@ -56,6 +57,7 @@ import Pomodoro from './components/Pomodoro.vue'
     <Habits />
     <Moto />
     <Memory />
+    <Goals />
     <Pomodoro />
   </div>
 
