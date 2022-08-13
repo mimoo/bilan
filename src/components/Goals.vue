@@ -274,26 +274,28 @@ function restart() {
       <ul id="goals_list_res" class="my-5">
         <li v-for="(goal, idx) in goals">
           <label :for="'toggle-goal-' + idx" class="inline-flex relative items-center mb-4 cursor-pointer">
-          <input type="checkbox" :checked="goal.done" value="" :id="'toggle-goal-' + idx" class="sr-only peer">
-          <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+            <input type="checkbox" :checked="goal.done" value="" :id="'toggle-goal-' + idx" class="sr-only peer">
+
+            <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
 
             <img src="@/assets/tomato.png" v-if="goal.pomodoro" class="ml-2">
 
-          <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+            <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
 
-            {{ goal.description }} 
-         
-          </span>
+              {{ goal.description }} 
+          
+            </span>
 
           </label>
 
-              <input :id="'notes-goal-' + idx" type="text" class="mb-5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" :placeholder="'notes on ' + goal" required>
+          <input :id="'notes-goal-' + idx" type="text" class="mb-5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" :placeholder="'notes on ' + goal" required>
 
+        </li>
+      </ul>
 
-          </li>
-        </ul>
-
-      <button type="button" class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2" @click="saveBilan">Save week reflection</button>
+      <button type="button" class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2" @click="saveBilan">
+        Save week reflection
+      </button>
     </div>
 
     <!-- during the week -->
@@ -317,10 +319,8 @@ function restart() {
                 
                 <label :for="'goal-checkbox-'+idx" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"> {{ goal.description }} </label>
 
-                
-
-                 <button @click="deleteGoal(idx)" class="hidden group-hover:inline-block">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" viewBox="0 0 20 20" fill="currentColor">
+                <button @click="deleteGoal(idx)" class="hidden group-hover:inline-block">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block ml-2" viewBox="0 0 20 20" fill="currentColor">
                   <path fill-rule="evenodd" d="M6.707 4.879A3 3 0 018.828 4H15a3 3 0 013 3v6a3 3 0 01-3 3H8.828a3 3 0 01-2.12-.879l-4.415-4.414a1 1 0 010-1.414l4.414-4.414zm4 2.414a1 1 0 00-1.414 1.414L10.586 10l-1.293 1.293a1 1 0 101.414 1.414L12 11.414l1.293 1.293a1 1 0 001.414-1.414L13.414 10l1.293-1.293a1 1 0 00-1.414-1.414L12 8.586l-1.293-1.293z" clip-rule="evenodd" />
                   </svg>
                 </button>
@@ -329,16 +329,16 @@ function restart() {
         </ul>
 
       <form>
-    <div class="mb-4">
-      <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="goal" type="text" placeholder="add a new goal" autocomplete="off">
+        <div class="mb-4">
+          <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="goal" type="text" placeholder="add a new goal" autocomplete="off">
+        </div>
+
+        <button type="button" class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2" @click="addGoal(false)">add goal</button>
+
+        <button type="button" class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2" @click="addGoal(true)">add pomodoro goal</button>
+
+      </form>
     </div>
-
-    <button type="button" class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2" @click="addGoal(false)">add goal</button>
-
-<button type="button" class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2" @click="addGoal(true)">add pomodoro goal</button>
-
-  </form>
-  </div>
 
 <!--
   <hr class="m-5">
