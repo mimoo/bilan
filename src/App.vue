@@ -47,7 +47,7 @@ function nameToComponent(name: string) {
     case "motto": return Motto;
     case "memory": return Memory;
     case "goals": return Goals;
-    case "pomodor": return Pomodoro;
+    case "pomodoro": return Pomodoro;
   }
 }
 
