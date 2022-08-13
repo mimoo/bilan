@@ -7,8 +7,8 @@ import { Ref, ref, reactive, computed } from 'vue';
 // constants
 //
 
-const GOALS_STORAGE_KEY = "goals_v2";
-const PREV_GOALS_STORAGE_KEY = "prev_goals_v2";
+const GOALS_STORAGE_KEY = "goals_v3";
+const PREV_GOALS_STORAGE_KEY = "prev_goals_v3";
 const GOALS_DATE_STORAGE_KEY = "goals_dates_v2";
 
 //
@@ -23,6 +23,17 @@ enum Phase {
   DoneOrNot,
 }
 
+interface Goal {
+  description: string;
+  pomodoro: boolean;
+  done: boolean;
+}
+
+interface PreviousGoal {
+  goal: Goal;
+  notes: string;
+}
+
 //
 // init refs
 //
@@ -33,7 +44,7 @@ let end_date = ref(moment(start_date.value).add(1, 'week'));
 
 const phase = ref(Phase.DuringTheWeek);
 
-const goals = ref<[string, boolean][]>([])
+const goals = ref<Goal[]>([])
 
 //
 // computed
@@ -90,7 +101,7 @@ if (goals_json) {
 //
 
 // function to add a goal
-function addGoal() {
+function addGoal(pomodoro: boolean) {
   console.assert(phase.value == Phase.DuringTheWeek);
 
   // get the input from the form
@@ -106,14 +117,18 @@ function addGoal() {
   formField.value = "";
 
   // add the goal
-  addGoalInner(goal);
+  addGoalInner(goal, pomodoro);
 }
 
-function addGoalInner(goal: string) {
+function addGoalInner(goal: string, pomodoro: boolean) {
   console.assert(phase.value == Phase.DuringTheWeek);
 
   // create the goal
-  goals.value.push([goal, false]);
+  goals.value.push({
+    description: goal,
+    pomodoro: pomodoro ,
+    done: false
+  });
 
   // save to localstorage
   window.localStorage.setItem(GOALS_STORAGE_KEY, JSON.stringify(goals.value));
@@ -137,7 +152,7 @@ function updateGoal() {
     goals_el.forEach((el, idx) => {
         const check = el.querySelector<HTMLInputElement>("input[type='checkbox']")!.checked;
         console.log(idx, check);
-        goals.value[idx][1] = check;
+        goals.value[idx].done = check;
     });
 
     window.localStorage.setItem(GOALS_STORAGE_KEY, JSON.stringify(goals.value));
@@ -170,12 +185,16 @@ function saveBilan() {
   // build `previous` (goal, done)
   let goals_list = document.querySelectorAll("#goals_list_res li");
 
-  let previous: [string, boolean, string][] = [];
+  let previous: PreviousGoal[] = [];
   goals_list.forEach((item, index) => {
-    let goal = goals.value[index][0];
-    let done = item.querySelector("input")!.checked;
+    let goal = goals.value[index];
+    goal.done = item.querySelector("input")!.checked;
     let notes = document.querySelector<HTMLInputElement>("#notes-goal-" + index)!.value;
-    previous.push([goal, done, notes]);
+    let previous_goal = {
+      goal: goal,
+      notes: notes,
+    };
+    previous.push(previous_goal);
   });
 
   // get array from storage
@@ -222,8 +241,8 @@ function saveBilan() {
 function createGoals() {
   console.assert(phase.value == Phase.DuringTheWeek);
 
-  addGoalInner("goal number 1");
-  addGoalInner("goal number 2");
+  addGoalInner("goal number 1", false);
+  addGoalInner("goal number 2", false);
 }
 
 function restart() {
@@ -253,14 +272,16 @@ function restart() {
       </div>
 
       <ul id="goals_list_res" class="my-5">
-        <li v-for="([goal, done], idx) in goals">
+        <li v-for="(goal, idx) in goals">
           <label :for="'toggle-goal-' + idx" class="inline-flex relative items-center mb-4 cursor-pointer">
-          <input type="checkbox" :checked="done" value="" :id="'toggle-goal-' + idx" class="sr-only peer">
+          <input type="checkbox" :checked="goal.done" value="" :id="'toggle-goal-' + idx" class="sr-only peer">
           <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+
+            <img src="@/assets/tomato.png" v-if="goal.pomodoro" class="ml-2">
 
           <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
 
-            {{ goal }} 
+            {{ goal.description }} 
          
           </span>
 
@@ -288,10 +309,15 @@ function restart() {
       </div>
 
         <ul id="goals_list" class="my-5">
-          <li v-for="([goal, done], idx) in goals" class="group">
+          <li v-for="(goal, idx) in goals" class="group">
             <div class="flex items-center mb-4">
-                <input @click="updateGoal" :checked="done" :id="'goal-checkbox-' + idx" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" >
-                <label :for="'goal-checkbox-'+idx" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"> {{ goal }} </label>
+                <input @click="updateGoal" :checked="goal.done" :id="'goal-checkbox-' + idx" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" >
+
+                <img src="@/assets/tomato.png" v-if="goal.pomodoro" class="ml-2">
+                
+                <label :for="'goal-checkbox-'+idx" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"> {{ goal.description }} </label>
+
+                
 
                  <button @click="deleteGoal(idx)" class="hidden group-hover:inline-block">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" viewBox="0 0 20 20" fill="currentColor">
@@ -307,7 +333,9 @@ function restart() {
       <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="goal" type="text" placeholder="add a new goal" autocomplete="off">
     </div>
 
-    <button type="button" class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2" @click="addGoal">add goal</button>
+    <button type="button" class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2" @click="addGoal(false)">add goal</button>
+
+<button type="button" class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2" @click="addGoal(true)">add pomodoro goal</button>
 
   </form>
   </div>
