@@ -267,7 +267,7 @@ function restart() {
 </script>
 
 <template>
-  <div class="w-96 shadow-md rounded-3xl px-8 pt-6 pb-8 mb-4" style="background-color: #ffffff">
+  <div class="w-96 shadow-md rounded-3xl px-8 pt-6 pb-8 mb-4 background" style="background-color: #ffffff">
     <h1 class="text-xl text-center font-bold my-2">habit tuning (<small><span v-if="countdown[0]">ended</span><span v-else>ending</span> {{ countdown[1] }}</small>)</h1>
 
     <!-- end of the week -->

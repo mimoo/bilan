@@ -8,7 +8,7 @@
 I use this for myself to:
 
 * try to change my habits
-* remember my "principle" or "moto" of the moment
+* remember my "principle" or "motto" of the moment
 * force myself to exercise my memory, as well as gratefulness
 
 You can use it too here: https://mimoo.github.io/bilan/

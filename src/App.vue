@@ -1,9 +1,60 @@
 <script setup lang="ts">
+import draggable from 'vuedraggable'
+import { Ref, ref, reactive, computed } from 'vue';
+
 import Habits from './components/Habits.vue'
-import Moto from './components/Moto.vue'
+import Motto from './components/Motto.vue'
 import Memory from './components/Memory.vue'
 import Goals from './components/Goals.vue'
 import Pomodoro from './components/Pomodoro.vue'
+
+/*
+let layout = ref([
+  [Habits],
+  [Motto, Pomodoro],
+  [Memory],
+  [Goals]
+]);
+*/
+
+//
+// Refs
+//
+
+let layout = ref([
+  [ { name: "habits" } ],
+  [
+    { name: "motto" }, 
+    { name: "pomodoro" }
+  ],
+  [ { name: "memory" } ],
+  [ { name: "goals" } ]
+]);
+
+//
+// Local storage
+//
+
+
+
+//
+// Functions
+//
+
+function nameToComponent(name: string) {
+  switch (name) {
+    case "habits": return Habits;
+    case "motto": return Motto;
+    case "memory": return Memory;
+    case "goals": return Goals;
+    case "pomodor": return Pomodoro;
+  }
+}
+
+function updateLayout() {
+  // TODO: save to storage
+  console.log(layout.value);
+}
 
 </script>
 
@@ -52,13 +103,53 @@ import Pomodoro from './components/Pomodoro.vue'
 
   </header>
 
-  <!-- active modules (limited to 4?) -->
-  <div class="flex flex-wrap items-start m-10 gap-4">
-    <Habits />
-    <Moto />
-    <Memory />
-    <Goals />
-    <Pomodoro />
+  <!-- active modules (TODO: enforce limit?) -->
+
+  <div class="grid grid-cols-4 m-10 gap-4">
+
+<!--
+    <div v-for="column in layout">
+      <div v-for="module in column">
+        <component :is="module"></component>
+      </div>
+    </div>
+-->
+
+    <div v-for="column in layout">
+    <draggable
+        class="list-group"
+        :list="column"
+        group="modules"
+        @change="updateLayout"
+        itemKey="name"
+      >
+        <template #item="{ element, index }">
+          <div class="list-group-item">
+            <!-- {{ element.name }} -->
+            <component :is="nameToComponent(element.name)"></component>
+            </div>
+        </template>
+      </draggable>
+      </div>
+
+    <!--
+    <div>
+      <Habits />
+    </div>
+
+    <div>
+      <Motto />
+      <Pomodoro />
+    </div>
+    
+    <div>
+      <Memory />
+    </div>
+
+    <div>
+      <Goals />
+    </div>
+    -->
   </div>
 
 </template>
