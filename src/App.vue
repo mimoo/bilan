@@ -8,14 +8,11 @@ import Memory from './components/Memory.vue'
 import Goals from './components/Goals.vue'
 import Pomodoro from './components/Pomodoro.vue'
 
-/*
-let layout = ref([
-  [Habits],
-  [Motto, Pomodoro],
-  [Memory],
-  [Goals]
-]);
-*/
+//
+// constants
+//
+
+const LAYOUT_KEY = "layout_v1";
 
 //
 // Refs
@@ -35,7 +32,13 @@ let layout = ref([
 // Local storage
 //
 
+let layout_json: string | null = window.localStorage.getItem(LAYOUT_KEY);
 
+if (layout_json == null) {
+  window.localStorage.setItem(LAYOUT_KEY, JSON.stringify(layout.value));
+} else {
+  layout.value = JSON.parse(layout_json);
+}
 
 //
 // Functions
@@ -52,8 +55,7 @@ function nameToComponent(name: string) {
 }
 
 function updateLayout() {
-  // TODO: save to storage
-  console.log(layout.value);
+  window.localStorage.setItem(LAYOUT_KEY, JSON.stringify(layout.value));
 }
 
 </script>
