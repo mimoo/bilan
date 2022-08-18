@@ -41,7 +41,10 @@ function onInput(e: any) {
 
 <template>
   <div class="w-96 shadow-md rounded-3xl px-8 pt-6 pb-8 mb-4" style="background-color: #ffffff">
-    <h1 class="text-xl text-center font-bold my-2">motto</h1>
+    <h1 class="text-xl text-center font-bold my-2">
+      <img src="@/assets/motto.png" class="ml-2 inline-block w-5">
+      motto
+    </h1>
 
     <div class="uppercase input-box whitespace-pre-wrap text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 caret-black" contenteditable="true" @input="onInput">{{moto}}</div>
   </div>

@@ -79,7 +79,10 @@ function finalizePomodoro() {
 
 <template>
   <div class="w-96 shadow-md rounded-3xl px-8 pt-6 pb-8 mb-4" style="background-color: #ffffff">
-    <h1 class="text-xl text-center font-bold my-2">pomodoro</h1>
+    <h1 class="text-xl text-center font-bold my-2">    
+      <img src="@/assets/tomato.png" class="ml-2 inline-block">
+      pomodoro
+    </h1>
 
     <!-- not in pomodoro -->
     <div v-if="phase == Phase.StartAPomodoro">

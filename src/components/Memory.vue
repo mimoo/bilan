@@ -128,7 +128,9 @@ function reset() {
 
 <template>
   <div class="w-96 shadow-md rounded-3xl px-8 pt-6 pb-8 mb-4" style="background-color: #ffffff">
-    <h1 class="text-xl text-center font-bold my-2">memory (<small><span v-if="countdown[0]">ended</span><span v-else>ending</span> {{ countdown[1] }}</small>)</h1>
+    <h1 class="text-xl text-center font-bold my-2">
+            <img src="@/assets/memory.png" class="ml-2 inline-block w-5">
+            memory (<small><span v-if="countdown[0]">ended</span><span v-else>ending</span> {{ countdown[1] }}</small>)</h1>
 
     <!-- lets wait -->
     <div v-if="phase == Phase.LetsWait">
